@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <title>دوري أبطال الفيزياء - مالك معاذ علي</title>
     <style>
-        :root { --bg: #0d1117; --card: #161b22; --accent: #ffd700; --win: #238636; --line: #30363d; --text: #c9d1d9; }
+        :root { --bg: #0d1117; --card: #161b22; --accent: #bebebe; --win: #238636; --line: #30363d; --text: #c9d1d9; }
         body { font-family: 'Cairo', sans-serif; background: var(--bg); color: var(--text); margin: 0; display: flex; flex-direction: column; height: 100vh; overflow: hidden; }
         .header { background: #010409; padding: 15px; border-bottom: 2px solid var(--accent); text-align: center; flex-shrink: 0; }
         .main-layout { display: flex; flex: 1; overflow: hidden; }
@@ -20,209 +20,216 @@
         .slot { padding: 8px 12px; font-size: 13px; min-height: 18px; display: flex; justify-content: space-between; border-bottom: 1px solid var(--line); }
         .slot:last-child { border: none; }
         .is-winner { color: var(--accent); font-weight: bold; }
-        
-        /* شاشة المواجهة - التصميم المحدث */
         .overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.98); z-index: 1000; text-align: center; padding-top: 20px; }
         .q-card { background: var(--win); color: white; padding: 25px; border-radius: 15px; width: 70%; margin: 10px auto; font-size: 26px; border: 2px solid var(--accent); box-shadow: 0 0 20px rgba(0,0,0,0.5); }
-        
-        /* منطقة الانسحاب الجديدة في المكان اللي حددته */
         .withdraw-zone { margin: 15px auto; width: 70%; display: flex; justify-content: center; align-items: center; gap: 10px; }
         .withdraw-input { padding: 12px; border-radius: 8px; border: 2px solid #da3633; background: #000; color: white; width: 300px; text-align: center; font-size: 16px; outline: none; }
         .btn-withdraw { background: #da3633; color: white; padding: 12px 20px; border-radius: 8px; border: none; cursor: pointer; font-weight: bold; }
-
+        .btn-reveal { background: #555; color: var(--accent); padding: 10px 20px; border-radius: 8px; border: 1px dashed var(--accent); cursor: pointer; font-weight: bold; margin-bottom: 15px; display: inline-block; }
         .btn { padding: 12px 25px; border-radius: 6px; border: none; cursor: pointer; font-weight: bold; margin: 5px; color: white; transition: 0.2s; }
-        
-        #winner-screen, #withdraw-screen { 
-            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
-            background: rgba(0,0,0,0.9); z-index: 2000; justify-content: center; 
-            align-items: center; flex-direction: column; backdrop-filter: blur(15px); 
-        }
+        #winner-screen, #withdraw-screen { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 2000; justify-content: center; align-items: center; flex-direction: column; backdrop-filter: blur(15px); }
         .fade-text { color: white; font-size: 80px; font-weight: bold; opacity: 0; transition: opacity 1s ease-in-out; text-shadow: 0 0 30px var(--accent); }
         .footer { background: #010409; padding: 10px; border-top: 1px solid var(--accent); text-align: center; font-size: 14px; flex-shrink: 0; }
     </style>
 </head>
 <body>
-
-<div class="header">
-    <h1> دوري الفيزياء الاحترافي </h1>
-    <span style="color: var(--accent)">بإشراف الأستاذ: مشعل شهري       |     إعداد وتصميم الطالب: مالك معاذ علي  </span>
-</div>
-
-<div class="main-layout">
-    <div class="bracket-area">
-        <div class="round" id="r32"><div class="round-title">دور الـ 32</div></div>
-        <div class="round" id="r16"><div class="round-title">دور الـ 16</div></div>
-        <div class="round" id="r8"><div class="round-title">ربع النهائي</div></div>
-        <div class="round" id="r4"><div class="round-title">نصف النهائي</div></div>
-        <div class="round" id="final"><div class="round-title">النهائي</div></div>
+    <div class="header">
+        <h1> دوري الفيزياء الاحترافي </h1>
+        <span style="color: var(--accent)">بإشراف الأستاذ: مشعل شهري | إعداد وتصميم الطالب: مالك معاذ علي</span>
     </div>
-
-    <div class="sidebar">
-        <h3>التحكم بالمباراة</h3>
-        <div class="wheel-container">
-            <div class="pointer"></div>
-            <canvas id="canvas" width="200" height="200"></canvas>
+    <div class="main-layout">
+        <div class="bracket-area">
+            <div class="round" id="r32"><div class="round-title">دور الـ 32</div></div>
+            <div class="round" id="r16"><div class="round-title">دور الـ 16</div></div>
+            <div class="round" id="r8"><div class="round-title">ربع النهائي</div></div>
+            <div class="round" id="r4"><div class="round-title">نصف النهائي</div></div>
+            <div class="round" id="final"><div class="round-title">النهائي</div></div>
         </div>
-        <button class="btn" style="background: var(--accent); color: #000; width: 100%;" onclick="spinMatch()">قرعة المباراة القادمة 🎡</button>
-        <button class="btn" style="background: #444; width: 100%;" onclick="location.reload()">🔄 إعادة الدوري</button>
+        <div class="sidebar">
+            <h3>التحكم بالمباراة</h3>
+            <div class="wheel-container">
+                <div class="pointer"></div>
+                <canvas id="canvas" width="200" height="200"></canvas>
+            </div>
+            <button class="btn" style="background: var(--accent); color: #000; width: 100%;" onclick="spinMatch()">قرعة المباراة القادمة 🎡</button>
+            <button class="btn" style="background: #444; width: 100%;" onclick="location.reload()">🔄 إعادة الدوري</button>
+        </div>
     </div>
-</div>
+    <div class="overlay" id="overlay">
+        <h1 style="color:var(--accent)">⚔️ ساحة التحدي ⚔️</h1>
+        <div style="display: flex; justify-content: center; gap: 40px; align-items: center; margin-bottom: 10px;">
+            <div><h2 id="p1Name"></h2><div style="font-size: 50px;" id="s1">0</div></div>
+            <div style="font-size: 40px; color: #555;">VS</div>
+            <div><h2 id="p2Name"></h2><div style="font-size: 50px;" id="s2">0</div></div>
+        </div>
+        <div class="q-card" id="qDisplay">السؤال سيظهر هنا...</div>
+        
+        <div style="margin-bottom: 10px;">
+            <button class="btn-reveal" onclick="revealCurrentAnswer()">💡 كشف الإجابة</button>
+            <button class="btn" style="background: #444; border: 1px solid var(--accent);" onclick="changeQuestionAnim()">تغيير السؤال 🔄</button>
+        </div>
 
-<div class="overlay" id="overlay">
-    <h1 style="color:var(--accent)">⚔️ ساحة التحدي ⚔️</h1>
-    <div style="display: flex; justify-content: center; gap: 40px; align-items: center; margin-bottom: 10px;">
-        <div><h2 id="p1Name"></h2><div style="font-size: 50px;" id="s1">0</div></div>
-        <div style="font-size: 40px; color: #555;">VS</div>
-        <div><h2 id="p2Name"></h2><div style="font-size: 50px;" id="s2">0</div></div>
+        <div class="withdraw-zone">
+            <input type="text" id="withdrawInput" class="withdraw-input" placeholder="اسم المنسحب...">
+            <button class="btn-withdraw" onclick="handleWithdrawal()">إعلان انسحاب ❌</button>
+        </div>
+
+        <div style="margin-top: 10px;">
+            <button class="btn" style="background: var(--win);" onclick="addPoint(1)">نقطة لليمين ✅</button>
+            <button class="btn" style="background: var(--win);" onclick="addPoint(2)">نقطة لليسار ✅</button>
+        </div>
+        <br>
+        <button class="btn" style="background: var(--accent); color: #000; width: 60%; margin-top: 15px; font-size: 18px;" onclick="finishMatch()">اعتماد النتيجة وتأهيل الفائز 🏆</button>
     </div>
-    
-    <div class="q-card" id="qDisplay">السؤال سيظهر هنا...</div>
-    
-    <div class="withdraw-zone">
-        <input type="text" id="withdrawInput" class="withdraw-input" placeholder="اكتب اسم الطالب المنسحب...">
-        <button class="btn-withdraw" onclick="handleWithdrawal()">إعلان انسحاب ❌</button>
-    </div>
-
-    <button class="btn" style="background: #444; border: 1px solid var(--accent);" onclick="changeQuestionAnim()">تغيير السؤال 🔄</button>
-    
-    <div style="margin-top: 10px;">
-        <button class="btn" style="background: var(--win);" onclick="addPoint(1)">نقطة لليمين ✅</button>
-        <button class="btn" style="background: var(--win);" onclick="addPoint(2)">نقطة لليسار ✅</button>
-    </div>
-    <br>
-    <button class="btn" style="background: var(--accent); color: #000; width: 60%; margin-top: 15px; font-size: 18px;" onclick="finishMatch()">اعتماد النتيجة وتأهيل الفائز 🏆</button>
-</div>
-
-<div id="winner-screen"><div id="winner-text" class="fade-text">الفائز</div></div>
-<div id="withdraw-screen"><div id="withdraw-text" class="fade-text">المنسحب</div></div>
-
-<div class="footer">إعداد وتصميم الطالب: <b>مالك معاذ علي</b> | المعلم: مشعل شهري</div>
+    <div id="winner-screen"><div id="winner-text" class="fade-text">الفائز</div></div>
+    <div id="withdraw-screen"><div id="withdraw-text" class="fade-text">المنسحب</div></div>
+    <div class="footer">إعداد وتصميم الطالب: <b>مالك معاذ علي</b> | المعلم: مشعل شهري</div>
 
 <script>
-    const students = ["إبراهيم كعبي","أحمد حنش","الزبير مقبل","إياد حكمي","بدر دباء","جاسم الحفة","حاتم الزهراني","حسن محمد","خليل مباركي","سعيد عضمان","عبدالاله العبيد","عبدالرحمن العوده","عبدالله محزري","عبدالله الداعري","علي آل خلاف","علي الشهري","علي العمران","عمار الصالحي","عمرو الاشعري","عوض محمد","فيصل البيشي","لؤي بدريه","مالك معاذ علي","محمد آل ساري","محمد عبدلي","محمود الصومالي","مشعل غازي","مشعل الحسن","مهدي السليمان","مهند الفائدي","وائل بقاشي","يحيى نزار"];
-    const questions = ["ما هو تعريف القوة المعيقة؟", "متى يصل الجسم للسرعة الحدية؟", "ما هو نص قانون نيوتن الثاني؟", "ما هي القوة العمودية؟", "ما وحدة قياس القوة؟", "ما الفرق بين الكتلة والوزن؟", "ما هو القصور الذاتي؟", "عرف القوة المتزنة؟", "ما هو الوزن الظاهري؟"];
+const students = ["إبراهيم كعبي","أحمد حنش","الزبير مقبل","إياد حكمي","بدر دباء","جاسم الحفة","حاتم الزهراني","حسن محمد","خليل مباركي","سعيد عضمان","عبدالاله العبيد","عبدالرحمن العوده","عبدالله محزري","عبدالله الداعري","علي آل خلاف","علي الشهري","علي العمران","عمار الصالحي","عمرو الاشعري","عوض محمد","فيصل البيشي","لؤي بدريه","مالك معاذ علي","محمد آل ساري","محمد عبدلي","محمود الصومالي","مشعل غازي","مشعل الحسن","مهدي السليمان","مهند الفائدي","وائل بقاشي","يحيى نزار"];
 
-    let state = { r32: [], r16: Array(8).fill(null), r8: Array(4).fill(null), r4: Array(2).fill(null), final: Array(1).fill(null), round: 'r32', matchIdx: 0, isFinished: false };
+const questionsBank = [
+    {q: "ماذا يقرأ الميزان المنزلي عندما تقف عليه؟", a: "القوة العمودية التي يؤثر بها الميزان للأعلى."},
+    {q: "ما هي القوة المعيقة؟", a: "قوة ممانعة يؤثر بها مائع في جسم يتحرك خلاله."},
+    {q: "متى تتساوى القوة المعيقة مع قوة الجاذبية للأرض؟", a: "عند وصول الجسم للسرعة الحدية."},
+    {q: "ما هو تعريف الوزن الظاهري؟", a: "القوة التي يؤثر بها الميزان على الجسم."},
+    {q: "إذا تسارع المصعد للأعلى، هل الوزن الظاهري أكبر أم أصغر؟", a: "أكبر من الوزن الحقيقي."},
+    {q: "ماذا يحدث للوزن الظاهري عند هبوط المصعد بتسارع ثابت؟", a: "يكون أقل من الوزن الحقيقي."},
+    {q: "متى يكون وزنك الظاهري مساوياً لصفر؟", a: "في حالة السقوط الحر (انقطاع الحبل)."},
+    {q: "على ماذا تعتمد القوة المعيقة؟", a: "سرعة الجسم، وخصائصه، وخصائص المائع."},
+    {q: "لماذا تزداد القوة المعيقة بزيادة السرعة؟", a: "بسبب زيادة الاصطدام بجزيئات المائع."},
+    {q: "ما هو تعريف السرعة الحدية؟", a: "السرعة التي يثبت عندها الجسم عندما تتساوى القوة المعيقة والجاذبية."},
+    {q: "إذا تحرك المصعد بسرعة منتظمة، ما علاقة الوزن الظاهري بالحقيقي؟", a: "متساويان."},
+    {q: "ما القوة التي يرفع بها الميزان جسمك؟", a: "القوة العمودية (Fn)."},
+    {q: "لماذا السرعة الحدية للورقة صغيرة؟", a: "بسبب كبر مساحة سطحها وخفة وزنها."},
+    {q: "عند التسارع للأسفل بـ 9.8، ماذا يقرأ الميزان؟", a: "صفر."},
+    {q: "ما سبب الشعور بزيادة الوزن عند انطلاق المصعد؟", a: "بسبب القوة الإضافية للتسارع للأعلى."},
+    {q: "لماذا يفتح المظلي مظلته؟", a: "لزيادة القوة المعيقة وتقليل السرعة."},
+    {q: "ما القانون المستخدم لإيجاد الوزن الظاهري؟", a: "Fn = m(g + a)"},
+    {q: "إذا انقطع الحبل، هل تختفي الجاذبية؟", a: "لا، تختفي القوة العمودية فقط."},
+    {q: "هل تتغير كتلة الجسم في مصعد يتسارع؟", a: "لا، الكتلة ثابتة."},
+    {q: "ما المقصود بالمائع؟", a: "الغازات والسوائل."},
+    {q: "ما اتجاه القوة المعيقة؟", a: "عكس اتجاه حركة الجسم."},
+    {q: "إذا سكن المصعد، ماذا يقرأ الميزان؟", a: "الوزن الحقيقي (Fg)."}
+];
 
-    function init() {
-        for(let i=0; i<16; i++) state.r32.push({p1: students[i*2], p2: students[i*2+1], win: null});
+let currentQIndex = 0;
+let s1=0, s2=0;
+let state = { r32: [], r16: Array(8).fill(null), r8: Array(4).fill(null), r4: Array(2).fill(null), final: Array(1).fill(null), round: 'r32', matchIdx: 0, isFinished: false };
+
+function init() {
+    for(let i=0; i<16; i++) state.r32.push({p1: students[i*2], p2: students[i*2+1], win: null});
+    render();
+}
+
+function render() {
+    ['r32','r16','r8','r4','final'].forEach(id => renderRound(id, state[id]));
+    drawWheel();
+}
+
+function renderRound(id, data) {
+    const container = document.getElementById(id);
+    const titleElement = container.querySelector('.round-title');
+    let html = titleElement ? titleElement.outerHTML : `<div class="round-title"></div>`;
+    data.forEach((m, i) => {
+        const isActive = (state.round === id && i === state.matchIdx && !state.isFinished) ? 'active' : '';
+        html += `<div class="matchup ${isActive}">
+            <div class="slot ${m && m.win === m.p1 ? 'is-winner' : ''}">${m ? m.p1 : ''}</div>
+            <div class="slot ${m && m.win === m.p2 ? 'is-winner' : ''}">${m ? m.p2 : ''}</div>
+        </div>`;
+    });
+    container.innerHTML = html;
+}
+
+function drawWheel() {
+    const ctx = document.getElementById('canvas').getContext('2d');
+    ctx.clearRect(0,0,200,200);
+    for(let i=0; i<8; i++) {
+        ctx.fillStyle = i % 2 ? '#161b22' : '#ffd700';
+        ctx.beginPath(); ctx.moveTo(100,100); ctx.arc(100,100,98, i*Math.PI/4, (i+1)*Math.PI/4); ctx.fill();
+    }
+}
+
+let rot = 0;
+function spinMatch() {
+    if(state.isFinished) return;
+    rot += 2000 + Math.random() * 2000;
+    document.getElementById('canvas').style.transform = `rotate(${rot}deg)`;
+    setTimeout(() => {
+        const m = state[state.round][state.matchIdx];
+        document.getElementById('p1Name').innerText = m.p1;
+        document.getElementById('p2Name').innerText = m.p2;
+        document.getElementById('overlay').style.display = 'block';
+        nextQ();
+    }, 4000);
+}
+
+function nextQ() {
+    currentQIndex = Math.floor(Math.random()*questionsBank.length);
+    document.getElementById('qDisplay').innerText = "❓ " + questionsBank[currentQIndex].q;
+}
+
+function revealCurrentAnswer() {
+    alert("💡 الإجابة الصحيحة هي:\n" + questionsBank[currentQIndex].a);
+}
+
+function changeQuestionAnim() {
+    document.getElementById('qDisplay').innerText = "جاري اختيار سؤال...";
+    setTimeout(() => { nextQ(); }, 400);
+}
+
+function addPoint(p) {
+    p===1 ? s1++ : s2++;
+    document.getElementById('s1').innerText = s1;
+    document.getElementById('s2').innerText = s2;
+    nextQ();
+}
+
+function handleWithdrawal() {
+    const name = document.getElementById('withdrawInput').value.trim();
+    const m = state[state.round][state.matchIdx];
+    if(!name) return;
+    let winner = (name === m.p1) ? m.p2 : (name === m.p2) ? m.p1 : null;
+    if(!winner) { alert("هذا الاسم غير موجود!"); return; }
+    completeMatch(winner);
+}
+
+function finishMatch() {
+    if (s1 === s2) { alert("تعادل! اسأل سؤالاً فاصلاً."); return; }
+    completeMatch(s1 > s2 ? state[state.round][state.matchIdx].p1 : state[state.round][state.matchIdx].p2);
+}
+
+function completeMatch(winner) {
+    state[state.round][state.matchIdx].win = winner;
+    document.getElementById('overlay').style.display = 'none';
+    s1=0; s2=0; document.getElementById('s1').innerText = 0; document.getElementById('s2').innerText = 0;
+    document.getElementById('withdrawInput').value = "";
+    if (state.round === 'final') {
+        state.isFinished = true; render(); showCelebration(winner);
+    } else {
+        state.matchIdx++;
+        if(state.matchIdx >= state[state.round].length) advanceRound();
         render();
     }
+}
 
-    function render() {
-        ['r32','r16','r8','r4','final'].forEach(id => renderRound(id, state[id]));
-        drawWheel();
-    }
+function advanceRound() {
+    let wins = state[state.round].map(m => m.win);
+    state.matchIdx = 0;
+    let next = state.round === 'r32' ? 'r16' : state.round === 'r16' ? 'r8' : state.round === 'r8' ? 'r4' : 'final';
+    state[next] = [];
+    for(let i=0; i < wins.length/2; i++) state[next].push({p1: wins[i*2], p2: wins[i*2+1], win: null});
+    state.round = next;
+}
 
-    function renderRound(id, data) {
-        const container = document.getElementById(id);
-        const titleElement = container.querySelector('.round-title');
-        let html = titleElement ? titleElement.outerHTML : `<div class="round-title"></div>`;
-        data.forEach((m, i) => {
-            const isActive = (state.round === id && i === state.matchIdx && !state.isFinished) ? 'active' : '';
-            html += `<div class="matchup ${isActive}">
-                <div class="slot ${m && m.win === m.p1 ? 'is-winner' : ''}">${m ? m.p1 : ''}</div>
-                <div class="slot ${m && m.win === m.p2 ? 'is-winner' : ''}">${m ? m.p2 : ''}</div>
-            </div>`;
-        });
-        container.innerHTML = html;
-    }
-
-    function drawWheel() {
-        const ctx = document.getElementById('canvas').getContext('2d');
-        ctx.clearRect(0,0,200,200);
-        for(let i=0; i<8; i++) {
-            ctx.fillStyle = i % 2 ? '#161b22' : '#ffd700';
-            ctx.beginPath(); ctx.moveTo(100,100); ctx.arc(100,100,98, i*Math.PI/4, (i+1)*Math.PI/4); ctx.fill();
-        }
-    }
-
-    let rot = 0;
-    function spinMatch() {
-        if(state.isFinished) return;
-        rot += 2000 + Math.random() * 2000;
-        document.getElementById('canvas').style.transform = `rotate(${rot}deg)`;
-        setTimeout(() => {
-            const m = state[state.round][state.matchIdx];
-            document.getElementById('p1Name').innerText = m.p1;
-            document.getElementById('p2Name').innerText = m.p2;
-            document.getElementById('overlay').style.display = 'block';
-            nextQ();
-        }, 4000);
-    }
-
-    function nextQ() { document.getElementById('qDisplay').innerText = "❓ " + questions[Math.floor(Math.random()*questions.length)]; }
-
-    function changeQuestionAnim() {
-        const qCard = document.getElementById('qDisplay');
-        qCard.innerText = "جاري اختيار سؤال...";
-        setTimeout(() => { nextQ(); }, 400);
-    }
-
-    let s1=0, s2=0;
-    function addPoint(p) { p===1 ? s1++ : s2++; document.getElementById('s1').innerText = s1; document.getElementById('s2').innerText = s2; nextQ(); }
-
-    function handleWithdrawal() {
-        const name = document.getElementById('withdrawInput').value.trim();
-        const m = state[state.round][state.matchIdx];
-        if(!name) return;
-        let winner = (name === m.p1) ? m.p2 : (name === m.p2) ? m.p1 : null;
-        if(!winner) { alert("هذا الاسم غير موجود في المباراة الحالية!"); return; }
-
-        const screen = document.getElementById('withdraw-screen');
-        const text = document.getElementById('withdraw-text');
-        screen.style.display = 'flex';
-        const sequence = [{ txt: "المنسحب", time: 1500 }, { txt: "...", time: 1000 }, { txt: name, time: 3000 }];
-        let current = 0;
-        function run() {
-            if (current >= sequence.length) {
-                screen.style.display = 'none';
-                document.getElementById('withdrawInput').value = "";
-                completeMatch(winner);
-                return;
-            }
-            text.innerText = sequence[current].txt; text.style.opacity = 1;
-            setTimeout(() => { text.style.opacity = 0; setTimeout(() => { current++; run(); }, 800); }, sequence[current].time);
-        }
-        run();
-    }
-
-    function finishMatch() {
-        if (s1 === s2) { alert("تعادل! غير السؤال للفصل."); return; }
-        completeMatch(s1 > s2 ? state[state.round][state.matchIdx].p1 : state[state.round][state.matchIdx].p2);
-    }
-
-    function completeMatch(winner) {
-        state[state.round][state.matchIdx].win = winner;
-        document.getElementById('overlay').style.display = 'none';
-        s1=0; s2=0; document.getElementById('s1').innerText = 0; document.getElementById('s2').innerText = 0;
-        if (state.round === 'final') { state.isFinished = true; render(); showCelebration(winner); }
-        else { state.matchIdx++; if(state.matchIdx >= state[state.round].length) advanceRound(); render(); }
-    }
-
-    function advanceRound() {
-        let wins = state[state.round].map(m => m.win);
-        state.matchIdx = 0;
-        let next = state.round === 'r32' ? 'r16' : state.round === 'r16' ? 'r8' : state.round === 'r8' ? 'r4' : 'final';
-        state[next] = [];
-        for(let i=0; i < wins.length/2; i++) state[next].push({p1: wins[i*2], p2: wins[i*2+1], win: null});
-        state.round = next;
-    }
-
-    function showCelebration(champion) {
-        const screen = document.getElementById('winner-screen');
-        const text = document.getElementById('winner-text');
-        screen.style.display = 'flex';
-        const sequence = [{ txt: "البطل النهائي", time: 2000 }, { txt: champion, time: 5000 }];
-        let current = 0;
-        function run() {
-            if (current >= sequence.length) return;
-            text.innerText = sequence[current].txt; text.style.opacity = 1;
-            setTimeout(() => { text.style.opacity = 0; setTimeout(() => { current++; run(); }, 1000); }, sequence[current].time);
-        }
-        run();
-    }
-    init();
+function showCelebration(champion) {
+    const screen = document.getElementById('winner-screen');
+    const text = document.getElementById('winner-text');
+    screen.style.display = 'flex';
+    text.innerText = "البطل: " + champion;
+    text.style.opacity = 1;
+}
+init();
 </script>
 </body>
 </html>
