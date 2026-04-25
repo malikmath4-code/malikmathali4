@@ -7,27 +7,41 @@
         :root { --bg: #0d1117; --card: #161b22; --accent: #bebebe; --win: #238636; --line: #30363d; --text: #c9d1d9; }
         body { font-family: 'Cairo', sans-serif; background: var(--bg); color: var(--text); margin: 0; display: flex; flex-direction: column; height: 100vh; overflow: hidden; }
         
-        /* شاشة البداية السوداء */
+        /* شاشة البداية الاحترافية */
         #splash-screen {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: #000; z-index: 5000; display: flex; flex-direction: column;
             justify-content: center; align-items: center; transition: opacity 1s ease;
         }
-        .splash-content { text-align: center; width: 100%; position: relative; }
-        .splash-title { font-size: 70px; font-weight: bold; color: white; opacity: 0; animation: fadeIn 2s forwards; margin-bottom: 20px; }
+        .splash-content { text-align: center; width: 100%; }
         
-        /* تكبير الخط أكثر وجعل الظهور متزامن */
-        .splash-sub { display: flex; justify-content: space-around; width: 90%; margin: 0 auto; opacity: 0; animation: fadeIn 2s forwards; color: var(--accent); font-size: 35px; font-weight: 700; }
-        
-        .btn-start { 
-            background: var(--win); color: white; padding: 18px 50px; border-radius: 8px; 
-            border: none; cursor: pointer; font-size: 28px; font-weight: bold; margin-top: 50px;
-            opacity: 0; animation: fadeIn 2s forwards; transition: 0.3s; /* تمت إزالة الـ delay ليظهر مع الكلام */
+        /* دوري الفيزياء - الأكبر */
+        .splash-title { 
+            font-size: 90px; font-weight: 900; color: white; margin-bottom: 30px;
+            opacity: 0; animation: fadeIn 2.5s forwards; 
         }
-        .btn-start:hover { transform: scale(1.1); box-shadow: 0 0 25px var(--win); }
+        
+        /* إعداد الطالب وإشراف المعلم - كبير وواضح */
+        .splash-sub { 
+            display: flex; justify-content: space-around; width: 95%; margin: 0 auto; 
+            color: var(--accent); font-size: 45px; font-weight: 800;
+            opacity: 0; animation: fadeIn 2.5s forwards;
+        }
+        
+        /* زر ابدأ - يظهر معهم في نفس الوقت */
+        .btn-start { 
+            background: var(--win); color: white; padding: 20px 60px; border-radius: 12px; 
+            border: none; cursor: pointer; font-size: 32px; font-weight: bold; margin-top: 60px;
+            opacity: 0; animation: fadeIn 2.5s forwards; transition: 0.3s;
+        }
+        .btn-start:hover { transform: scale(1.1); box-shadow: 0 0 30px var(--win); }
 
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes fadeIn { 
+            from { opacity: 0; transform: translateY(20px); } 
+            to { opacity: 1; transform: translateY(0); } 
+        }
 
+        /* الكود الأصلي بدون تعديل */
         .header { background: #010409; padding: 15px; border-bottom: 2px solid var(--accent); text-align: center; flex-shrink: 0; }
         .main-layout { display: flex; flex: 1; overflow: hidden; }
         .sidebar { width: 300px; background: var(--card); border-left: 1px solid var(--line); padding: 20px; display: flex; flex-direction: column; align-items: center; gap: 20px; flex-shrink: 0; }
