@@ -15,7 +15,10 @@
         }
         .splash-content { text-align: center; width: 100%; position: relative; }
         .splash-title { font-size: 70px; font-weight: bold; color: white; opacity: 0; animation: fadeIn 2s forwards; margin-bottom: 20px; }
-        .splash-sub { display: flex; justify-content: space-around; width: 80%; margin: 0 auto; opacity: 0; animation: fadeIn 2s forwards; color: var(--accent); font-size: 20px; }
+        
+        /* تكبير الخط هنا كما طلبت */
+        .splash-sub { display: flex; justify-content: space-around; width: 85%; margin: 0 auto; opacity: 0; animation: fadeIn 2s forwards; color: var(--accent); font-size: 28px; font-weight: 600; }
+        
         .btn-start { 
             background: var(--win); color: white; padding: 15px 40px; border-radius: 8px; 
             border: none; cursor: pointer; font-size: 24px; font-weight: bold; margin-top: 50px;
@@ -25,7 +28,6 @@
 
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* باقي التنسيقات الأصلية */
         .header { background: #010409; padding: 15px; border-bottom: 2px solid var(--accent); text-align: center; flex-shrink: 0; }
         .main-layout { display: flex; flex: 1; overflow: hidden; }
         .sidebar { width: 300px; background: var(--card); border-left: 1px solid var(--line); padding: 20px; display: flex; flex-direction: column; align-items: center; gap: 20px; flex-shrink: 0; }
@@ -118,7 +120,6 @@
     <div class="footer">إعداد وتصميم الطالب: <b>مالك معاذ علي</b> | المعلم: مشعل شهري</div>
 
 <script>
-// وظيفة إخفاء شاشة البداية
 function startApp() {
     const splash = document.getElementById('splash-screen');
     splash.style.opacity = '0';
